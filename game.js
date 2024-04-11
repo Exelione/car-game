@@ -37,8 +37,8 @@
     const coin = document.querySelector('.coin')
     const coinInfo = createElementInfo(coin)
    
-    // const arrow = document.querySelector('.arrow')
-    // const arrowInfo = createElementInfo(arrow)
+    const arrow = document.querySelector('.arrow')
+    const arrowInfo = createElementInfo(arrow)
     
     const danger = document.querySelector('.danger')
     const dangerInfo = createElementInfo(danger)
@@ -57,8 +57,6 @@
             return finishGame()
         }
         elementAnimation(coin, coinInfo, -55)
-        // elementAnimation(arrow, arrowInfo, -640)
-       
         
         if(coinInfo.visible && hasCollision(carInfo, coinInfo)){
             gameScore++
@@ -68,7 +66,20 @@
             gameScore %3 === 0 && (speed +=2)
         }
        
-        
+        elementAnimation(arrow, arrowInfo, -640)
+        if(arrowInfo.visible && hasCollision(carInfo, arrowInfo)){
+            
+            arrow.style.display = 'none'
+            arrowInfo.visible = false
+            
+            speed += 10;
+
+            setTimeout(()=>{
+                speed -= 10
+            },1000)
+           
+            gameScore %3 === 0 && (speed +=2)
+        }
         
         treesAnimation()
         animationId = requestAnimationFrame(startGame);
