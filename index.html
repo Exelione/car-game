@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAR-game</title>
+    <link rel="stylesheet" type="text/CSS" href="style.css">
+    <link rel="stylesheet" type="text/CSS"
+    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+</head>
+<body>
+    <div class="road"></div>
+    <img class="car" src="./img/car.png" alt="car">
+
+    <img class="tree tree1" src="./img/tree1.png">
+    <img class="tree tree2" src="./img/tree2.png">
+    <img class="tree tree3" src="./img/tree3.png">
+    <img class="tree tree4" src="./img/tree2.png">
+    <img class="tree tree5" src="./img/tree3.png">
+    <img class="tree tree6" src="./img/tree1.png">
+
+    <img class="arrow" src="./img/arrow.png">
+    <img class="danger" src="./img/danger.png"> 
+    <img class="coin" src="./img/coin.png"> 
+
+    <button class="game-button" type="button">
+        <img class="pause" src="./img/pause.png">
+        <img class="play" src="./img/play.png">
+    </button>
+    <div class="game-score"></div>
+    <div class="game-end">
+        <div class="game-end-container">
+
+            <p class="game-end-text">Итоговый счет:
+                <span class="game-end-text-score">
+                    0
+                </span>
+            </p>
+            <button type="button" class="restartButton">Начать заново</button>
+        </div>
+   
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

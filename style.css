@@ -1,0 +1,184 @@
+body {
+    background: #6c7b2a;
+    display: flex;
+    justify-content: center;
+    
+    overflow: hidden;
+}
+.car {
+    position: absolute;
+    transform: translateY(75vh);
+    width: 80px;
+    
+}
+.road {
+    width: 300px;
+    height: 100vh;
+    background: #817f85;
+    
+}
+.tree {
+    position: absolute;
+    z-index: 10;
+}
+
+.tree1 {
+    width: 250px;
+    transform: translate(-230px, -15vh);
+}
+.tree2 {
+    width: 300px;
+    transform: translate(-210px, 35vh);
+}
+.tree3 {
+    width: 230px;
+    transform: translate(-240px, 70vh);
+}
+.tree4 {
+    width: 280px;
+    transform: translate(210px, -5vh);
+}
+.tree5 {
+    width: 240px;
+    transform: translate(230px, 30vh);
+}
+.tree6 {
+    width: 270px;
+    transform: translate(220px, 80vh);
+}
+.game-button {
+    position: fixed;
+    right: 10px;
+    top: 10px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    transition: transform .3s ease;
+    z-index: 20;
+    
+    
+}
+.game-button:hover {
+    transform: scale(1.2);
+    
+    
+}
+.game-button img {
+    width: 60px;
+    height: 60px;
+}
+.game-button .play {
+    display: none;
+}
+.game-end {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    
+    justify-content: center;
+    align-items: center;
+    
+    background: rgb(5, 5, 5, 0.7);
+    display: none;
+    z-index: 999;
+
+}
+.game-end-container {
+    display: flex;
+    padding: 13px 8px;
+    border-radius: 8px;
+    background: white;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 350px;
+}
+.game-end-text {
+    display: flex;
+    align-items: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 20px;
+}
+.game-end-text span {
+    color:red;
+    font-size: 25px;
+    margin-left: 10px;
+}
+.game-end-text::after,
+.game-end-text::before {
+    content: '🚘';
+    display: block;
+    font-size: 25px;
+    animation: ease .3s jump infinite;
+    margin-left: 10px;
+    animation-direction: alternate;
+}
+.game-end-text::before {
+    animation-delay: .1s;
+    margin-right: 10px;
+}
+
+.restartButton {
+    background: rgb(232, 64, 17);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    border-radius: 8px;
+    border: none;
+    width: 150px;
+    height: 45px;
+    border: 2px solid white;
+    box-shadow: -5px 1px 49px -13px rgba(0, 0, 0, 0.2);
+    transition: transform .3s ease;
+}
+.restartButton:hover {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+@keyframes jump {
+    from {
+        transform: translateY(-10px);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.game-score {
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    z-index: 999;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    background: rgb(232,64,17);
+    font-size: 25px;
+    justify-content: center;
+    color: white;
+    display: flex;
+    align-items: center;
+    font-family: cursive;
+    box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+}
+
+.coin {
+    position: absolute;
+    transform: translate(55px, -55px);
+    width: 50px;
+    
+}
+.arrow {
+    position: absolute;
+    transform: translate(100px, -640px);
+    width: 50px;
+}
+.danger {
+    position: absolute;
+    width: 80px;
+    transform: translate(-100px, -170px);
+}
