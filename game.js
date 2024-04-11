@@ -37,8 +37,8 @@
     const coin = document.querySelector('.coin')
     const coinInfo = createElementInfo(coin)
    
-    const arrow = document.querySelector('.arrow')
-    const arrowInfo = createElementInfo(arrow)
+    // const arrow = document.querySelector('.arrow')
+    // const arrowInfo = createElementInfo(arrow)
     
     const danger = document.querySelector('.danger')
     const dangerInfo = createElementInfo(danger)
@@ -57,7 +57,7 @@
             return finishGame()
         }
         elementAnimation(coin, coinInfo, -55)
-        elementAnimation(arrow, arrowInfo, -640)
+        // elementAnimation(arrow, arrowInfo, -640)
        
         
         if(coinInfo.visible && hasCollision(carInfo, coinInfo)){
