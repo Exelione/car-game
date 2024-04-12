@@ -182,3 +182,20 @@ body {
     width: 80px;
     transform: translate(-100px, -170px);
 }
+
+.dangerActive {
+    position: absolute;
+    width: 80px;
+    transform: translate(-100px, -170px);
+    animation: ease .3s pulse infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.5;
+    }   
+    100%{
+        opacity: 1;
+    }
+    
+}

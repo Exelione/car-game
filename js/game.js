@@ -3,7 +3,7 @@
 
     let animationId = null;
 
-    
+
 
     let speed = 4;
     let gameScore = 0;
@@ -36,10 +36,10 @@
 
     const coin = document.querySelector('.coin')
     const coinInfo = createElementInfo(coin)
-   
+
     const arrow = document.querySelector('.arrow')
     const arrowInfo = createElementInfo(arrow)
-    
+
     const danger = document.querySelector('.danger')
     const dangerInfo = createElementInfo(danger)
 
@@ -47,40 +47,53 @@
     const roadHeight = road.clientHeight
     const roadWidth = road.clientWidth / 2
 
-    
+
 
     animationId = requestAnimationFrame(startGame)
 
     function startGame() {
-        elementAnimation(danger, dangerInfo, -170)
-        if (hasCollision(carInfo, dangerInfo)){
+        elementAnimation( danger, dangerInfo, -170)
+        if (dangerInfo.visible && hasCollision(carInfo, dangerInfo)) {
             return finishGame()
         }
         elementAnimation(coin, coinInfo, -55)
-        
-        if(coinInfo.visible && hasCollision(carInfo, coinInfo)){
+
+        if (coinInfo.visible && hasCollision(carInfo, coinInfo)) {
             gameScore++
             coin.style.display = 'none'
             coinInfo.visible = false
             score.textContent = `${gameScore}`
-            gameScore %3 === 0 && (speed +=2)
+            gameScore % 3 === 0 && (speed += 2)
         }
-       
+
         elementAnimation(arrow, arrowInfo, -640)
-        if(arrowInfo.visible && hasCollision(carInfo, arrowInfo)){
-            
+        if (arrowInfo.visible && hasCollision(carInfo, arrowInfo)) {
+
             arrow.style.display = 'none'
             arrowInfo.visible = false
             
-            speed += 10;
+            danger.style.opacity = 0.2
+            dangerInfo.visible = false
+            speed += 7;
+            dangerInfo.ignoreAppearance = true;
+            arrowInfo.ignoreAppearance = true;
 
-            setTimeout(()=>{
-                speed -= 10
-            },1000)
-           
-            gameScore %3 === 0 && (speed +=2)
+            setTimeout(() => {
+                speed -= 7
+                danger.style.opacity = 1
+                danger.className = 'dangerActive'
+                setTimeout(()=>{
+                    dangerInfo.visible = true
+                    dangerInfo.ignoreAppearance = false;
+                    arrowInfo.ignoreAppearance = false;
+                    danger.className = 'danger'
+                },1100)
+                
+            }, 2400)
+
+            gameScore % 3 === 0 && (speed += 2)
         }
-        
+
         treesAnimation()
         animationId = requestAnimationFrame(startGame);
 
@@ -93,13 +106,15 @@
             const maxXCoord = roadWidth + 1 - elInfo.width
             const randomXCoord = parseInt(Math.random() * maxXCoord)
             const direction = parseInt(Math.random() * 2)
-            el.style.display = 'initial'
-            elInfo.visible = 'true'
+            if(!elInfo.ignoreAppearance){
+                el.style.display = 'initial'
+                elInfo.visible = 'true'
+            }
             elXCoords = direction === 0
                 ? -randomXCoord
                 : randomXCoord
         }
-        
+
 
         elInfo.coords.y = elYCoords;
         elInfo.coords.x = elXCoords;
@@ -179,15 +194,16 @@
         }
     })
     function carMove(x, y) {
-        
+
         car.style.transform = `translate(${x}px, ${y}px)`
     }
-    function createElementInfo(element){
+    function createElementInfo(element) {
         return {
             coords: getCords(element),
-            width: element.clientWidth /2,
+            width: element.clientWidth / 2,
             height: element.clientHeight,
             visible: true,
+            ignoreAppearance: false,
         }
     }
 
@@ -239,9 +255,9 @@
         const numericX = parseFloat(x)
         return { x: numericX, y: numericY }
     }
-    
+
     function hasCollision(element1Info, element2Info) {
-       
+
         const element1InfoYTop = element1Info.coords.y
         const element1InfoYBottom = element1Info.coords.y + element1Info.height
 
@@ -254,22 +270,22 @@
         const element2InfoXLeft = element2Info.coords.x - element2Info.width
         const element2InfoXRight = element2Info.coords.x + element2Info.width
 
-        if(element1InfoYTop > element2InfoYBottom || element1InfoYBottom < element2InfoYTop ){
+        if (element1InfoYTop > element2InfoYBottom || element1InfoYBottom < element2InfoYTop) {
             return false
         }
-        if(element1InfoXLeft > element2InfoXRight  || element1InfoXRight < element2InfoXLeft){
+        if (element1InfoXLeft > element2InfoXRight || element1InfoXRight < element2InfoXLeft) {
             return false
         }
         return true
     }
-    function cancelAnimations(){
+    function cancelAnimations() {
         cancelAnimationFrame(animationId)
         cancelAnimationFrame(carInfo.move.top)
         cancelAnimationFrame(carInfo.move.bottom)
         cancelAnimationFrame(carInfo.move.right)
         cancelAnimationFrame(carInfo.move.left)
     }
-    function finishGame(){
+    function finishGame() {
 
         cancelAnimations()
         gameButton.style.display = 'none'
@@ -279,7 +295,7 @@
         gameEndTextScore.innerText = gameScore
     }
 
-    
+
     gameButton.addEventListener('click', () => {
         isPause = !isPause
         if (isPause) {
