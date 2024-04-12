@@ -3,13 +3,11 @@
 
     let animationId = null;
 
-
-
     let speed = 4;
     let gameScore = 0;
     const gameEnd = document.querySelector('.game-end')
     const gameButton = document.querySelector('.game-button')
-    const restartButton = document.querySelector('.restartButton')
+    
     const score = document.querySelector('.game-score')
     const car = document.querySelector('.car')
     const carInfo = {
@@ -23,17 +21,6 @@
 
     }
 
-
-    const trees = document.querySelectorAll('.tree')
-    let treesCoords = []
-    trees.forEach((tree) => {
-
-        const coordsTree = getCords(tree)
-        treesCoords.push(coordsTree)
-
-
-    })
-
     const coin = document.querySelector('.coin')
     const coinInfo = createElementInfo(coin)
 
@@ -43,20 +30,14 @@
     const danger = document.querySelector('.danger')
     const dangerInfo = createElementInfo(danger)
 
-    const road = document.querySelector('.road')
-    const roadHeight = road.clientHeight
-    const roadWidth = road.clientWidth / 2
-
-
-
     animationId = requestAnimationFrame(startGame)
 
     function startGame() {
-        elementAnimation( danger, dangerInfo, -170)
+        elementAnimation( danger, dangerInfo, -170, speed)
         if (dangerInfo.visible && hasCollision(carInfo, dangerInfo)) {
             return finishGame()
         }
-        elementAnimation(coin, coinInfo, -55)
+        elementAnimation(coin, coinInfo, -55, speed)
 
         if (coinInfo.visible && hasCollision(carInfo, coinInfo)) {
             gameScore++
@@ -66,7 +47,7 @@
             gameScore % 3 === 0 && (speed += 2)
         }
 
-        elementAnimation(arrow, arrowInfo, -640)
+        elementAnimation(arrow, arrowInfo, -640, speed)
         if (arrowInfo.visible && hasCollision(carInfo, arrowInfo)) {
 
             arrow.style.display = 'none'
@@ -94,49 +75,11 @@
             gameScore % 3 === 0 && (speed += 2)
         }
 
-        treesAnimation()
+        treesLogic.treesAnimation(speed)
         animationId = requestAnimationFrame(startGame);
 
     }
-    function elementAnimation(el, elInfo, elInitialYCoords) {
-        let elYCoords = elInfo.coords.y + speed
-        let elXCoords = elInfo.coords.x
-        if (elYCoords > window.innerHeight) {
-            elYCoords = elInitialYCoords
-            const maxXCoord = roadWidth + 1 - elInfo.width
-            const randomXCoord = parseInt(Math.random() * maxXCoord)
-            const direction = parseInt(Math.random() * 2)
-            if(!elInfo.ignoreAppearance){
-                el.style.display = 'initial'
-                elInfo.visible = 'true'
-            }
-            elXCoords = direction === 0
-                ? -randomXCoord
-                : randomXCoord
-        }
-
-
-        elInfo.coords.y = elYCoords;
-        elInfo.coords.x = elXCoords;
-        el.style.transform = `translate(${elXCoords}px, ${elYCoords}px)`;
-    }
-
-
-    function treesAnimation() {
-        for (i = 0; i < trees.length; i++) {
-            const tree = trees[i]
-            const coords = treesCoords[i]
-
-            let newYCoords = coords.y + speed
-
-            if (newYCoords > window.innerHeight) {
-                newYCoords = -330
-            }
-            treesCoords[i].y = newYCoords
-            tree.style.transform = `translate(${coords.x}px, ${newYCoords}px)`
-        }
-    }
-
+  
     document.addEventListener('keydown', (event) => {
         if (isPause) {
             return
@@ -147,27 +90,27 @@
             if (carInfo.move.bottom) {
                 return
             }
-            carInfo.move.top = requestAnimationFrame(carMoveToTop)
+            carInfo.move.top = requestAnimationFrame(carMoveToTop(car, carInfo))
 
         }
         else if ((code === 'ArrowDown' || code === 'KeyS') && carInfo.move.bottom === null) {
             if (carInfo.move.top) {
                 return
             }
-            carInfo.move.bottom = requestAnimationFrame(carMoveToBottom)
+            carInfo.move.bottom = requestAnimationFrame(carMoveToBottom(car, carInfo))
         }
         else if ((code === 'ArrowRight' || code === 'KeyD') && carInfo.move.right === null) {
             if (carInfo.move.left) {
                 return
             }
-            carInfo.move.right = requestAnimationFrame(carMoveToRight)
+            carInfo.move.right = requestAnimationFrame(carMoveToRight(car, carInfo))
 
         }
         else if ((code === 'ArrowLeft' || code === 'KeyA') && carInfo.move.left === null) {
             if (carInfo.move.right) {
                 return
             }
-            carInfo.move.left = requestAnimationFrame(carMoveToLeft)
+            carInfo.move.left = requestAnimationFrame(carMoveToLeft(car, carInfo))
         }
     })
     document.addEventListener('keyup', (event) => {
@@ -193,91 +136,9 @@
             carInfo.move.left = null
         }
     })
-    function carMove(x, y) {
 
-        car.style.transform = `translate(${x}px, ${y}px)`
-    }
-    function createElementInfo(element) {
-        return {
-            coords: getCords(element),
-            width: element.clientWidth / 2,
-            height: element.clientHeight,
-            visible: true,
-            ignoreAppearance: false,
-        }
-    }
 
-    function carMoveToTop() {
-        const newY = carInfo.coords.y - 5
-        if (newY + 5 < 0) {
-            return
-        }
-        carInfo.coords.y = newY
-        carMove(carInfo.coords.x, newY)
-        carInfo.move.top = requestAnimationFrame(carMoveToTop)
-
-    }
-    function carMoveToBottom() {
-        const newY = carInfo.coords.y + 5
-        if (newY - 5 > roadHeight - carInfo.height) {
-            return
-        }
-        carInfo.coords.y = newY
-        carMove(carInfo.coords.x, newY)
-        carInfo.move.bottom = requestAnimationFrame(carMoveToBottom)
-    }
-    function carMoveToLeft() {
-        const newX = carInfo.coords.x - 5
-        if (newX + 5 < -roadWidth + carInfo.width) {
-            return
-        }
-        carInfo.coords.x = newX
-        carMove(newX, carInfo.coords.y)
-        carInfo.move.left = requestAnimationFrame(carMoveToLeft)
-    }
-
-    function carMoveToRight() {
-        const newX = carInfo.coords.x + 5
-        if (newX - 5 > roadWidth - carInfo.width) {
-            return
-        }
-        carInfo.coords.x = newX
-        carMove(newX, carInfo.coords.y)
-        carInfo.move.right = requestAnimationFrame(carMoveToRight)
-    }
-
-    function getCords(element) {
-        const matrix = window.getComputedStyle(element).transform
-        const array = matrix.split(',')
-        const y = array[array.length - 1]
-        const x = array[array.length - 2]
-        const numericY = parseFloat(y)
-        const numericX = parseFloat(x)
-        return { x: numericX, y: numericY }
-    }
-
-    function hasCollision(element1Info, element2Info) {
-
-        const element1InfoYTop = element1Info.coords.y
-        const element1InfoYBottom = element1Info.coords.y + element1Info.height
-
-        const element1InfoXLeft = element1Info.coords.x - element1Info.width
-        const element1InfoXRight = element1Info.coords.x + element1Info.width
-
-        const element2InfoYTop = element2Info.coords.y
-        const element2InfoYBottom = element2Info.coords.y + element2Info.height
-
-        const element2InfoXLeft = element2Info.coords.x - element2Info.width
-        const element2InfoXRight = element2Info.coords.x + element2Info.width
-
-        if (element1InfoYTop > element2InfoYBottom || element1InfoYBottom < element2InfoYTop) {
-            return false
-        }
-        if (element1InfoXLeft > element2InfoXRight || element1InfoXRight < element2InfoXLeft) {
-            return false
-        }
-        return true
-    }
+   
     function cancelAnimations() {
         cancelAnimationFrame(animationId)
         cancelAnimationFrame(carInfo.move.top)
@@ -309,9 +170,6 @@
             gameButton.children[1].style.display = 'none'
         }
     })
-    restartButton.addEventListener('click', () => {
-        window.location.reload()
-
-    })
+    
 })()
 
