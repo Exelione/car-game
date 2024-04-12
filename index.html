@@ -40,7 +40,18 @@
         </div>
    
     </div>
-
+   
+    <script src="./js/constants.js"></script>
+    <script src="./js/utils.js"></script>
+    <script src="./js/elementAnimation.js"></script>
+    <script src="./js/treesAnimation.js"></script>
+    <script src="./js/movemant.js"></script>
     <script src="./js/game.js"></script>
+    <script>
+        const restartButton = document.querySelector('.restartButton')
+        restartButton.addEventListener('click', () => {
+        window.location.reload()
+    })
+    </script>
 </body>
 </html>
