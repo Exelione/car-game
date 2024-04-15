@@ -1,13 +1,15 @@
 (function () {
+    const LS = localStorage;
+    let recordScore = LS.getItem('score');
     let isPause = false;
-
     let animationId = null;
-
     let speed = 4;
     let gameScore = 0;
+
     const gameEnd = document.querySelector('.game-end')
     const gameButton = document.querySelector('.game-button')
-    
+    const record = document.querySelector('.game-record')
+    record.textContent = recordScore === null ? 'Own Record' : `Own Record: ${recordScore}`
     const score = document.querySelector('.game-score')
     const car = document.querySelector('.car')
     const carInfo = {
@@ -33,7 +35,9 @@
     animationId = requestAnimationFrame(startGame)
 
     function startGame() {
-        elementAnimation( danger, dangerInfo, -170, speed)
+
+
+        elementAnimation(danger, dangerInfo, -170, speed)
         if (dangerInfo.visible && hasCollision(carInfo, dangerInfo)) {
             return finishGame()
         }
@@ -52,7 +56,7 @@
 
             arrow.style.display = 'none'
             arrowInfo.visible = false
-            
+
             danger.style.opacity = 0.2
             dangerInfo.visible = false
             speed += 7;
@@ -63,23 +67,25 @@
                 speed -= 7
                 danger.style.opacity = 1
                 danger.className = 'dangerActive'
-                setTimeout(()=>{
+                setTimeout(() => {
                     dangerInfo.visible = true
                     dangerInfo.ignoreAppearance = false;
                     arrowInfo.ignoreAppearance = false;
                     danger.className = 'danger'
-                },1100)
-                
+                }, 1100)
+
             }, 2400)
 
             gameScore % 3 === 0 && (speed += 2)
         }
 
         treesLogic.treesAnimation(speed)
+
         animationId = requestAnimationFrame(startGame);
 
+
     }
-  
+
     document.addEventListener('keydown', (event) => {
         if (isPause) {
             return
@@ -138,7 +144,7 @@
     })
 
 
-   
+
     function cancelAnimations() {
         cancelAnimationFrame(animationId)
         cancelAnimationFrame(carInfo.move.top)
@@ -146,14 +152,22 @@
         cancelAnimationFrame(carInfo.move.right)
         cancelAnimationFrame(carInfo.move.left)
     }
+
+
     function finishGame() {
 
         cancelAnimations()
+        record.style.display = 'none'
         gameButton.style.display = 'none'
         score.style.display = 'none'
         gameEnd.style.display = 'flex'
         const gameEndTextScore = document.querySelector('.game-end-text-score')
         gameEndTextScore.innerText = gameScore
+        if (gameScore > recordScore) {
+            LS.setItem('score', gameScore)
+            const newRecord = document.querySelector('.game-end-record')
+            newRecord.style.display = 'initial'
+        }
     }
 
 
@@ -170,6 +184,7 @@
             gameButton.children[1].style.display = 'none'
         }
     })
-    
+
+
 })()
 

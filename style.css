@@ -96,6 +96,12 @@ body {
     flex-direction: column;
     width: 350px;
 }
+.game-end-record {
+    color: lightskyblue;
+    display: none;
+    font-size: 25px;    
+    animation:  ease .3s pulse infinite;
+}
 .game-end-text {
     display: flex;
     align-items: center;
@@ -148,7 +154,7 @@ body {
     }
 }
 
-.game-score {
+.game-score, .game-record {
     position: fixed;
     left: 10px;
     top: 10px;
@@ -164,6 +170,16 @@ body {
     align-items: center;
     font-family: cursive;
     box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+}
+.game-record {
+    top: 65px;
+    background: rgb(26, 140, 233);
+    width: 110px;
+    border-radius: 8px;
+    font-size: 15px;
+    text-align: center;
+    padding: 4px;
+    
 }
 
 .coin {
